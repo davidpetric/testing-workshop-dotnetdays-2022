@@ -1,34 +1,28 @@
 using FluentAssertions;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace AmazingCalculator.Tests.Unit;
 
 public class IntCalculatorTests
 {
-    [Fact]
-    public void Add_ShouldAddTwoNumbers_WhenTheyArePositiveIntegers()
+    [Theory]
+    // [InlineData(1, 2, 3)]
+    // [InlineData(-5, 5, 0)]
+    // [InlineData(-5, -5, -10)]
+    //[MemberData(nameof(AddData))]
+    [ClassData(typeof(AddData))]
+    public void Add_ShouldAddTwoNumbers_WhenTheyAreIntegers(
+        int a, int b, int expected)
     {
         // Arrange
         var sut = new IntCalculator();
         
         // Act
-        var result = sut.Add(1, 2);
+        var result = sut.Add(a, b);
 
         // Assert
-        result.Should().Be(3);
-    }
-    
-    [Fact]
-    public void Add_ShouldReturnZero_WhenAnOppositePositiveAndNegativeNumberAreAdded()
-    {
-        // Arrange
-        var calculator = new IntCalculator();
-
-        // Act
-        var result = calculator.Add(5, -5);
-    
-        // Assert
-        result.Should().Be(0);
+        result.Should().Be(expected);
     }
     
     [Fact]
@@ -94,5 +88,15 @@ public class IntCalculatorTests
     
         // Assert
         result.Should().Be(7);
+    }
+
+    public static IEnumerable<object[]> AddData()
+    {
+        return new List<object[]>
+        {
+            new object[] { 1, 2, 3 },
+            new object[] { -5, 5, 0 },
+            new object[] { -5, -5, -10 }
+        };
     }
 }
